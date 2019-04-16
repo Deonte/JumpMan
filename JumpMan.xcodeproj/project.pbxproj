@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04664F8B226687BD0042B152 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04664F8A226687BD0042B152 /* Constants.swift */; };
+		04664F9022668B6E0042B152 /* DEMOMrJumpCourse.png in Resources */ = {isa = PBXBuildFile; fileRef = 04664F8C22668B6E0042B152 /* DEMOMrJumpCourse.png */; };
+		04664F9122668B6E0042B152 /* DEMOMrJumpCourse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04664F8D22668B6E0042B152 /* DEMOMrJumpCourse@2x.png */; };
+		04664F9222668B6E0042B152 /* DEMOMrJumpCourse.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 04664F8E22668B6E0042B152 /* DEMOMrJumpCourse.tmx */; };
+		04664F9322668B6E0042B152 /* DEMOMrJumpCourse@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04664F8F22668B6E0042B152 /* DEMOMrJumpCourse@3x.png */; };
+		04664F9A22668C0C0042B152 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 04664F9622668C0B0042B152 /* LFCGzipUtility.m */; };
+		04664F9B22668C0C0042B152 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 04664F9922668C0B0042B152 /* JSTileMap.m */; };
+		04664F9F22668C8A0042B152 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 04664F9E22668C8A0042B152 /* libz.tbd */; };
 		04D513432262A8970073038A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D513422262A8970073038A /* AppDelegate.swift */; };
 		04D513452262A8970073038A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 04D513442262A8970073038A /* GameScene.sks */; };
 		04D513472262A8970073038A /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 04D513462262A8970073038A /* Actions.sks */; };
@@ -19,6 +27,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04664F8A226687BD0042B152 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		04664F8C22668B6E0042B152 /* DEMOMrJumpCourse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DEMOMrJumpCourse.png; sourceTree = "<group>"; };
+		04664F8D22668B6E0042B152 /* DEMOMrJumpCourse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DEMOMrJumpCourse@2x.png"; sourceTree = "<group>"; };
+		04664F8E22668B6E0042B152 /* DEMOMrJumpCourse.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = DEMOMrJumpCourse.tmx; sourceTree = "<group>"; };
+		04664F8F22668B6E0042B152 /* DEMOMrJumpCourse@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DEMOMrJumpCourse@3x.png"; sourceTree = "<group>"; };
+		04664F9522668C0A0042B152 /* JumpMan-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JumpMan-Bridging-Header.h"; sourceTree = "<group>"; };
+		04664F9622668C0B0042B152 /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFCGzipUtility.m; sourceTree = "<group>"; };
+		04664F9722668C0B0042B152 /* JSTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTileMap.h; sourceTree = "<group>"; };
+		04664F9822668C0B0042B152 /* LFCGzipUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFCGzipUtility.h; sourceTree = "<group>"; };
+		04664F9922668C0B0042B152 /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTileMap.m; sourceTree = "<group>"; };
+		04664F9E22668C8A0042B152 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		04D5133F2262A8970073038A /* JumpMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JumpMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04D513422262A8970073038A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04D513442262A8970073038A /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -37,17 +56,48 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04664F9F22668C8A0042B152 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04664F9422668B7D0042B152 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				04664F8C22668B6E0042B152 /* DEMOMrJumpCourse.png */,
+				04664F8E22668B6E0042B152 /* DEMOMrJumpCourse.tmx */,
+				04664F8D22668B6E0042B152 /* DEMOMrJumpCourse@2x.png */,
+				04664F8F22668B6E0042B152 /* DEMOMrJumpCourse@3x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		04664F9C22668C220042B152 /* JSTileMap */ = {
+			isa = PBXGroup;
+			children = (
+				04664F9722668C0B0042B152 /* JSTileMap.h */,
+				04664F9922668C0B0042B152 /* JSTileMap.m */,
+				04664F9822668C0B0042B152 /* LFCGzipUtility.h */,
+				04664F9622668C0B0042B152 /* LFCGzipUtility.m */,
+			);
+			path = JSTileMap;
+			sourceTree = "<group>";
+		};
+		04664F9D22668C8A0042B152 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				04664F9E22668C8A0042B152 /* libz.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		04D513362262A8970073038A = {
 			isa = PBXGroup;
 			children = (
 				04D513412262A8970073038A /* JumpMan */,
-				04D513402262A8970073038A /* Products */,
+				04664F9D22668C8A0042B152 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,6 +107,7 @@
 				04D5133F2262A8970073038A /* JumpMan.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		04D513412262A8970073038A /* JumpMan */ = {
@@ -66,12 +117,17 @@
 				04D513442262A8970073038A /* GameScene.sks */,
 				04D513462262A8970073038A /* Actions.sks */,
 				04D513482262A8970073038A /* GameScene.swift */,
+				04664F8A226687BD0042B152 /* Constants.swift */,
 				04D5135A2262AC560073038A /* LevelOne.swift */,
 				04D5134A2262A8970073038A /* GameViewController.swift */,
 				04D5134C2262A8970073038A /* Main.storyboard */,
 				04D5134F2262A8970073038A /* Assets.xcassets */,
 				04D513512262A8970073038A /* LaunchScreen.storyboard */,
+				04664F9422668B7D0042B152 /* Resources */,
+				04664F9C22668C220042B152 /* JSTileMap */,
 				04D513542262A8970073038A /* Info.plist */,
+				04D513402262A8970073038A /* Products */,
+				04664F9522668C0A0042B152 /* JumpMan-Bridging-Header.h */,
 			);
 			path = JumpMan;
 			sourceTree = "<group>";
@@ -108,6 +164,7 @@
 				TargetAttributes = {
 					04D5133E2262A8970073038A = {
 						CreatedOnToolsVersion = 10.2;
+						LastSwiftMigration = 1020;
 					};
 				};
 			};
@@ -134,10 +191,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04664F9322668B6E0042B152 /* DEMOMrJumpCourse@3x.png in Resources */,
 				04D5134E2262A8970073038A /* Main.storyboard in Resources */,
 				04D513452262A8970073038A /* GameScene.sks in Resources */,
 				04D513502262A8970073038A /* Assets.xcassets in Resources */,
 				04D513532262A8970073038A /* LaunchScreen.storyboard in Resources */,
+				04664F9222668B6E0042B152 /* DEMOMrJumpCourse.tmx in Resources */,
+				04664F9122668B6E0042B152 /* DEMOMrJumpCourse@2x.png in Resources */,
+				04664F9022668B6E0042B152 /* DEMOMrJumpCourse.png in Resources */,
 				04D513472262A8970073038A /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,9 +210,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04664F8B226687BD0042B152 /* Constants.swift in Sources */,
 				04D513492262A8970073038A /* GameScene.swift in Sources */,
 				04D5134B2262A8970073038A /* GameViewController.swift in Sources */,
+				04664F9B22668C0C0042B152 /* JSTileMap.m in Sources */,
 				04D513432262A8970073038A /* AppDelegate.swift in Sources */,
+				04664F9A22668C0C0042B152 /* LFCGzipUtility.m in Sources */,
 				04D5135B2262AC560073038A /* LevelOne.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 848C2FNJZC;
 				INFOPLIST_FILE = JumpMan/Info.plist;
@@ -307,6 +372,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.deonte.JumpMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JumpMan/JumpMan-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -316,6 +383,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 848C2FNJZC;
 				INFOPLIST_FILE = JumpMan/Info.plist;
@@ -325,6 +393,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.deonte.JumpMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JumpMan/JumpMan-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
