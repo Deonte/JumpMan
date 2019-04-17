@@ -101,7 +101,7 @@ class GameScene: SKScene {
     skView.ignoresSiblingOrder = true
     
     // Transition effect
-    let transition = SKTransition.moveIn(with: .right, duration: kLevelTransitionDelay)
+    let transition = SKTransition.moveIn(with: .down, duration: kLevelTransitionDelay)
     
     // Variable holding levelOne class
     var scene: LevelOne!

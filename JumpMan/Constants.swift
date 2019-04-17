@@ -10,4 +10,6 @@ import Foundation
 
 // Delay for a level transition
 
-var kLevelTransitionDelay: TimeInterval = 0.5
+var kLevelTransitionDelay: TimeInterval = 0.6
+
+
