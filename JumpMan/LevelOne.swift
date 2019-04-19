@@ -12,7 +12,12 @@ import SpriteKit
 class LevelOne: SKScene, SKPhysicsContactDelegate {
   
   private let worldNode = SKNode()
+  
   private let levelOneMap = JSTileMap(named: "DEMOMrJumpCourse.tmx")
+  private let mountainsFG = JSTileMap(named: "DEMOMrJumpMountainsFG.tmx")
+  private let mountainsBG = JSTileMap(named: "DEMOMrJumpMountainsBG.tmx")
+  private let cloudsFG = JSTileMap(named: "DEMOMrJumpCloudsFG.tmx")
+  private let cloudsBG = JSTileMap(named: "DEMOMrJumpCloudsBG.tmx")
   
   private var platform = SKNode()
   private var ceiling = SKNode()
@@ -23,8 +28,18 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
   
   private var scoreNode = SKNode()
   private var scoreNodeGroup = TMXObjectGroup()
+  private var xPositionIndex = Int()
+  
+  // Creating mrjump
+  private var mrJump = SKSpriteNode(imageNamed: "Character0.png")
   
   private var levelBackgroundColor: UIColor = #colorLiteral(red: 0.4431372549, green: 0.8431372549, blue: 0.9529411765, alpha: 1)
+  private var uiBlurImage = UIImage(named: "UIBlurImage")
+  private var UIBlurImageView = UIImageView()
+  
+  private var restartGameButton = UIButton()
+  private var restartGameButtonImage = UIImage(named: "RestartGameButton")
+  
   private let screenSize: CGRect = UIScreen.main.bounds
   
   private let mrJumpCategory: UInt32 = 1 << 0
@@ -33,8 +48,14 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
   private let finishCategory: UInt32 = 1 << 3
   
   // Variable for side scroll
-  private var levelOneSpeed: CGFloat = 6
+  private var levelOneSpeed: CGFloat = 4 // Change back to 6 to normal speed
+  private var mountainsFGSpeed: CGFloat = 1
+  private var mountainsBGSpeed: CGFloat = 0.5
+  
   private var isAlive = Bool()
+  
+  // Save User Settings
+  private let userSettingsDefaults: UserDefaults = .standard
   
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
@@ -48,17 +69,79 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
   
   func commonThingsToInit() {
     
+    // Add the mountainsBG map to the scene
+    mountainsBG?.zPosition = -4
+    worldNode.addChild(mountainsBG!)
+    
+    // Add the cloudsBG map to the scene
+    cloudsBG?.zPosition = -3
+    worldNode.addChild(cloudsBG!)
+    
+    // Add the mountains fg to the scene
+    mountainsFG?.zPosition = -2
+    worldNode.addChild(mountainsFG!)
+    
+    // Add the cloudsFG map to the scene
+    cloudsFG?.zPosition = -1
+    worldNode.addChild(cloudsFG!)
+    
     // Adding the level one map to the world Node
     levelOneMap?.zPosition = 0
     worldNode.addChild(levelOneMap!)
     
+    // Gravity Properties
+    physicsWorld.gravity = CGVector(dx: 0.0, dy: -11)
+    physicsWorld.contactDelegate = self
+    
+    // MARK: Mr Jump
+    // Setup mrJump Character
+    let startLocation = CGPoint(x: self.frame.size.width / 4 , y: 250)
+    mrJump.position = startLocation
+    mrJump.size = CGSize(width: mrJump.frame.size.width, height: mrJump.frame.size.height)
+    
+    // Set up the path for the SKPhysics body
+    let mrJumpOffsetX = CGFloat(mrJump.frame.size.width * mrJump.anchorPoint.x)
+    let mrJumpOffsetY = CGFloat(mrJump.frame.size.width * mrJump.anchorPoint.y)
+    let mrJumpPath = CGMutablePath()
+    mrJumpPath.move(to: CGPoint(x: 3 - mrJumpOffsetX, y: 0 - mrJumpOffsetY))
+    mrJumpPath.addLine(to: CGPoint(x: 15 - mrJumpOffsetX, y: 0 - mrJumpOffsetY))
+    mrJumpPath.addLine(to: CGPoint(x: 15 - mrJumpOffsetX, y: 48 - mrJumpOffsetY))
+    mrJumpPath.addLine(to: CGPoint(x: 3 - mrJumpOffsetX, y: 48 - mrJumpOffsetY))
+    mrJumpPath.closeSubpath()
+    mrJump.physicsBody = SKPhysicsBody(polygonFrom: mrJumpPath)
+    mrJump.physicsBody?.allowsRotation = false
+    mrJump.physicsBody?.isDynamic = true
+    mrJump.physicsBody?.friction = 0.0
+    mrJump.physicsBody?.restitution = 0.0
+    
+    // Add mrJump to its own category
+    mrJump.physicsBody?.categoryBitMask = mrJumpCategory
+    
+    // mrJump can collide with the enemyCategory
+    mrJump.physicsBody?.collisionBitMask = enemyCategory
+    
+    // Notification is made when mrJump collides with the enemy
+    mrJump.physicsBody?.contactTestBitMask = enemyCategory
+    
+    // Animate mrJump to make him run
+    var mrJumpRunning = [SKTexture]()
+    for i in 0...7 {
+      mrJumpRunning.append(SKTexture(imageNamed: "Character\(i)"))
+    }
+    
+    let runningAction = SKAction.animate(with: mrJumpRunning, timePerFrame: 0.1)
+    mrJump.run(SKAction.repeatForever(runningAction))
+    
+    // Add mrJump to the worldNode
+    worldNode.addChild(mrJump)
+    
     //MARK: Platforms
     // Accessing the object layer in the tmx file to get all the platform data
     let platformGroup: TMXObjectGroup = (self.levelOneMap?.groupNamed("Platform"))! // The group name is case sensitive
-
+    
     for object in 0..<platformGroup.objects.count {
       let platformObject = platformGroup.objects.object(at: object) as! NSDictionary
-    
+      
       let width = platformObject.object(forKey: "width") as! String
       let height = platformObject.object(forKey: "height") as! String
       let platformSize = CGSize(width: Int(width)!, height: Int(height)!)
@@ -126,7 +209,7 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
       spikes.physicsBody?.categoryBitMask = enemyCategory
       // Notification is made when Jump Man cololides with the spikes
       spikes.physicsBody?.contactTestBitMask = mrJumpCategory
-    
+      
       // Add the node spikes to the node and continue to the loop through the group and access the next spikeObject in the group
       spike.addChild(spikes)
     }
@@ -295,11 +378,50 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
   }
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
+    // When touch ends return mrJump to the ground (platform)
+    mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 0))
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     
+    // Only allow mrJump to jump if he is on the ground (platform - zero y velocity)
+    if mrJump.physicsBody?.velocity.dy == 0 {
+      
+      // Access the current screen width
+      let screenWidth = screenSize.width
+      
+      // Request a UITraitCollection instance
+      let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+      
+      // Check the idiom for the device type
+      switch deviceIdiom {
+        // Apply the correct impulse for the device widths
+      case .phone:
+        switch screenWidth {
+        case 0...667:
+          // iPhone 8
+          mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 16))
+        case 668...736:
+          // iPhone 8 plus
+            mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 116))
+        default:
+          // Iphone X, XS Max, XR
+            mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 16))
+        }
+      case.pad:
+        switch screenWidth {
+        case 0...1024:
+          // Non Pro ipads
+          mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 24))
+
+        default:
+          //iPad pro and above
+          mrJump.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 28))
+        }
+        
+      default:
+        break
+      }    }
   }
   
   override func update(_ currentTime: TimeInterval) {
@@ -309,22 +431,92 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
       
       // Setting up the functionality to move things from the right to the left (platform)
       let s = (((levelOneMap?.position.x)! - speed) - self.frame.width) * -1.0
-      let w = CGFloat((levelOneMap?.mapSize.width)!) * CGFloat((levelOneMap?.tileSize.width)!)
+      let w = CGFloat((levelOneMap?.mapSize.width)!) * CGFloat((levelOneMap?.tileSize.width)!) - CGFloat((levelOneMap?.mapSize.width)! + 400)
       levelOneSpeed = s > w ? 0 : levelOneSpeed
       // MARK: HAVE TO FIND BETTER LOGIC TO STOP MAP WHEN TILE MAP ENDED
-
+      
+      // Setting up the functionality to move things from the right to the left (MountainsFG and Clouds FG)
+      let ss = (((mountainsFG?.position.x)! - speed) - self.frame.width) * 1.0
+      let ww = CGFloat((mountainsFG?.mapSize.width)!) * CGFloat((mountainsFG?.tileSize.width)!)
+      mountainsFGSpeed = ss > ww ? 0 : mountainsFGSpeed
+      
+      // moving the mountainsFG and the CloudsFG
+      mountainsFG?.position.x -= mountainsFGSpeed
+      cloudsFG?.position.x -= mountainsFGSpeed
+      
+      // Setting up the functionality to move things from the right to the left (MountainsBG and Clouds BG)
+      let sss = (((mountainsBG?.position.x)! - speed) - self.frame.width) * 1.0
+      let www = CGFloat((mountainsBG?.mapSize.width)!) * CGFloat((mountainsBG?.tileSize.width)!)
+      mountainsBGSpeed = sss > www ? 0 : mountainsBGSpeed
+      
+      // moving the mountainsBG and the CloudsBG
+      mountainsBG?.position.x -= mountainsBGSpeed
+      cloudsBG?.position.x -= mountainsBGSpeed
+      
       // Moving the levelOneMap, Spike, Ceiling, and the platform physics
       levelOneMap?.position.x -= levelOneSpeed
-    
+      platform.position.x -= levelOneSpeed
+      ceiling.position.x -= levelOneSpeed
+      spike.position.x -= levelOneSpeed
+      sidewall.position.x -= levelOneSpeed
+      water.position.x -= levelOneSpeed
+      finish.position.x -= levelOneSpeed
+      scoreNode.position.x -= levelOneSpeed
+      
+      
     }
     
   }
   
   func didBegin(_ contact: SKPhysicsContact) {
     
+    let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+    
+    switch contactMask {
+      
+    case scoreCategory | mrJumpCategory:
+      // Passed a score milestone, percentage of level completed needs to increse by 1
+      kScore += 2
+      
+      print("Passed another milestone: \(kScore)%")
+      
+    case mrJumpCategory | enemyCategory:
+      print("enemy")
+      // Stop the scene from moving as mrJump is dead
+      isAlive = false
+      /* Get the x position of the scoreNode object,
+       we need to look into the object layer in the tile map called Score,
+       kScore holds an Int that represents the amount of scoreNodeObjects passed through */
+    
+      // This is to account for the fact that we need to start by pulling out the first object in the scoreNodeGroup array (0 not 1)
+      
+      if kScore >= 1 {
+        // 0 not 1
+        xPositionIndex = Int(kScore - 1)
+      } else {
+        // We are ok after 1
+        xPositionIndex = Int(kScore)
+      }
+      
+      // Get the latest scoreNodeObject MrJump has passed through from the scoreNodeGroup array using xPositionIndex
+      let scoreNodeObject = scoreNodeGroup.objects.object(at: xPositionIndex) as! NSDictionary
+      
+      // Access the x position in the scoreNodeObject and use that to compare it to see if it is the highest (Do that in saveTheXPosition function)
+      kNodeXPosition = scoreNodeObject.object(forKey: "x") as! CGFloat
+      
+    case mrJumpCategory | finishCategory:
+      print("finish")
+    default:
+      break
+    }
   }
   
-  
+  func delay(delay: Double, closure: @escaping ()-> ()) {
+    let deadlineTime = DispatchTime.now() + delay
+    DispatchQueue.main.asyncAfter(deadline: deadlineTime, execute: closure)
+    //DispatchQueue.main.asyncAfter(deadline: DISPATCH_TIME_NOW(Int64(delay * Double(NSEC_PER_SEC))), execute: closure)
+    
+  }
   
   
 }
