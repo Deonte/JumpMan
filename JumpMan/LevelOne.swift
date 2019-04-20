@@ -35,7 +35,7 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
   
   private var levelBackgroundColor: UIColor = #colorLiteral(red: 0.4431372549, green: 0.8431372549, blue: 0.9529411765, alpha: 1)
   private var uiBlurImage = UIImage(named: "UIBlurImage")
-  private var UIBlurImageView = UIImageView()
+  private var uiBlurImageView = UIImageView()
   
   private var restartGameButton = UIButton()
   private var restartGameButtonImage = UIImage(named: "RestartGameButton")
@@ -503,6 +503,22 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
       
       // Access the x position in the scoreNodeObject and use that to compare it to see if it is the highest (Do that in saveTheXPosition function)
       kNodeXPosition = scoreNodeObject.object(forKey: "x") as! CGFloat
+      
+      // Call the game overlay with a delay
+      delay(delay: kLevelTransitionDelay) {
+        // Blur the background
+        self.uiBlurImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        self.uiBlurImageView.image = self.uiBlurImage
+        self.uiBlurImageView.layer.zPosition = 0
+        self.uiBlurImageView.accessibilityIdentifier = "IDuiBlurImageView"
+        self.view?.addSubview(self.uiBlurImageView)
+        
+        // Create a button called restartGameButton
+        self.restartGameButton = UIButton(type: .custom)
+        self.restartGameButton.setImage(self.restartGameButtonImage, for: .normal)
+        
+        // TODO: 10:00 min mark in video course
+      }
       
     case mrJumpCategory | finishCategory:
       print("finish")
