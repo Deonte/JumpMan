@@ -22,3 +22,6 @@ var kNodeXPosition = CGFloat()
 
 // Hold the x position of the scoreNodeObject that has been retrieved from NSUserDefaults
 var kLevelOneNodeXPosition = CGFloat()
+
+// Scene animation time
+var kSceneAnimationTime: TimeInterval = 0.2

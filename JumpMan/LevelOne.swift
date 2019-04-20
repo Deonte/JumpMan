@@ -338,6 +338,9 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
     // Enable a trigger to allow the scene to move and pause when the player has been destroyed
     isAlive = true
     
+    // Retrieve the highScore level Completion point from userDefaults
+    kLevelOneHighScore = userSettingsDefaults.float(forKey: "LevelOneHighScore")
+    
     // Add the world node to the screen and then scale it to fit the device widths/size
     addChild(worldNode)
     
@@ -421,7 +424,9 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
         
       default:
         break
-      }    }
+      }
+      
+    }
   }
   
   override func update(_ currentTime: TimeInterval) {
@@ -518,7 +523,57 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
         self.restartGameButton.setImage(self.restartGameButtonImage, for: .normal)
         
         // TODO: 10:00 min mark in video course
+    
+        // Access the current screen width
+        let screenWidth = self.screenSize.width
+        
+        // Request a UITraitCollection instance
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        
+        // Check the idiom for the device type
+        switch deviceIdiom {
+        // Apply the correct impulse for the device widths
+        case .phone:
+          switch screenWidth {
+          case 0...667:
+            // iPhone 8
+            self.restartGameButton.frame = CGRect(x: self.frame.size.width + self.restartGameButton.frame.size.width, y: self.frame.size.height / 2, width: 100, height: 115)
+          case 668...736:
+            // iPhone 8 plus
+            self.restartGameButton.frame = CGRect(x: self.frame.size.width + self.restartGameButton.frame.size.width, y: self.frame.size.height / 2, width: 115, height: 115)
+          default:
+            // Iphone X, XS Max, XR
+            self.restartGameButton.frame = CGRect(x: self.frame.size.width + self.restartGameButton.frame.size.width, y: self.frame.size.height / 2, width: 130, height: 150)
+          }
+        case.pad:
+          switch screenWidth {
+          case 0...1024:
+            // Non Pro ipads
+            self.restartGameButton.frame = CGRect(x: self.frame.size.width + self.restartGameButton.frame.size.width, y: self.frame.size.height / 2, width: 150, height: 170)
+          default:
+            //iPad pro and above
+            self.restartGameButton.frame = CGRect(x: self.frame.size.width + self.restartGameButton.frame.size.width, y: self.frame.size.height / 2, width: 280, height: 300)
+          }
+          
+        default:
+          break
+        }
+        
+        self.restartGameButton.layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        self.restartGameButton.layer.zPosition = 2
+        self.restartGameButton.accessibilityIdentifier = "IDrestartGameButton"
+        
+        self.restartGameButton.addTarget(self, action: #selector(self.restartGameButtonAction), for: .touchUpInside)
+        self.view?.addSubview(self.restartGameButton)
+        
+        // Animate the restart game button
+        UIView.animate(withDuration: kSceneAnimationTime, animations: {
+          self.restartGameButton.layer.position.x = self.frame.size.width - self.restartGameButton.frame.size.width
+        })
+        
       }
+      
+      // Save the score (completion point) to userDefaults
       
     case mrJumpCategory | finishCategory:
       print("finish")
@@ -534,5 +589,60 @@ class LevelOne: SKScene, SKPhysicsContactDelegate {
     
   }
   
+  private func saveTheScore() {
+    // If kScore is higher than kLevelOneHighScore (userDefaults) then make kLevelOneHighScore the same as kScore and save it again to UserDefaults
+    
+    if kScore > kLevelOneHighScore {
+      
+      // Make kLevelOneHighScore the same as kScore
+      kLevelOneHighScore = kScore
+      
+      // Save kLevelOneHighScore to userDefaults
+      userSettingsDefaults.set(kLevelOneHighScore, forKey: "LevelOneHighScore")
+    }
+    
+  }
+  
+  @objc private func restartGameButtonAction(sender: UIButton!) {
+    
+    // Call the func to restart the game with a delay
+    delay(delay: 0.2) {
+      self.restartGame()
+    }
+  }
+  
+  private func removeStuffFromTheView() {
+    // Removes the uiBlurImageView from the view
+    uiBlurImageView.removeFromSuperview()
+    
+    // Removes the restartGameButton from the view
+    restartGameButton.removeFromSuperview()
+    
+    // Remove scene before transition
+    scene?.removeFromParent()
+    
+    // Create teh scene to transition to
+    let skView  = self.view! as SKView
+    skView.ignoresSiblingOrder = true
+    
+    // Transition effect
+    let transition = SKTransition.moveIn(with: .down, duration: kLevelTransitionDelay)
+    
+    // Variable holding levelOne class
+    var scene: LevelOne!
+    scene = LevelOne(size: skView.bounds.size)
+    
+    // Setting the scene to filll the screen
+    scene.scaleMode = .aspectFill
+    
+    // Presenting the scene with the transition effect
+    skView.presentScene(scene, transition: transition)
+    
+  }
+  
+  private func restartGame() {
+    // Remove all the UIElements from the view first
+    removeStuffFromTheView()
+  }
   
 }

@@ -51,3 +51,13 @@ class GameViewController: UIViewController {
         return true
     }
 }
+
+
+// Extending float so that I can remove the decimal point
+
+extension Float {
+  
+  var cleanValue: String {
+    return truncatingRemainder(dividingBy: 1) == 0 ?  String(format: "%.0f", self) : String(self)
+  }
+}
