@@ -163,6 +163,7 @@
  </objectgroup>
  <objectgroup name="Finish">
   <object id="1" x="12585" y="268" width="22" height="22"/>
+<!--  <object id="1" x="455" y="339" width="22" height="22"/>-->
  </objectgroup>
  <layer name="World" width="430" height="20">
   <data>
